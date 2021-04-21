@@ -26,6 +26,7 @@
   },
   "private": true,
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": ["./testExamples"]
   }
 }
