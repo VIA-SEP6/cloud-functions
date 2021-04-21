@@ -1,15 +1,19 @@
 const functions = require("firebase-functions");
 const cors = require("cors")({ origin: true });
+const { info, error } = require("../util/logger");
 // const { db, admin } = require("../util/adminDbUtil");
 const admin = require("firebase-admin");
 admin.initializeApp();
 const db = admin.firestore();
 module.exports = functions
   .region("europe-west1")
-  .https.onRequest((request, response) => {
-    const { username, password, email } = request.query;
-    if (!username || !password || !email) response.sendStatus(400);
-    admin
+  .https.onRequest(async (request, response) => {
+    const { username, password, email, age, country } = request.body;
+    if (!username || !password || !email)
+      return cors(request, response, () => {
+        response.status(400).send({ data: "Missing mandatory fields" });
+      });
+    await admin
       .auth()
       .createUser({
         email: email,
@@ -17,17 +21,26 @@ module.exports = functions
         password: password,
         disabled: false,
       })
-      .then(() => {
+      .then((user) => {
         db.collection(`users`)
-          .add({
+          .doc(`${user.uid}`)
+          .set({
             email: email,
             username: username,
-            password: password,
+            age: age,
+            country: country,
           })
           .then(() => {
-            cors(request, response, () => {
+            info(`Register User | Successful | ${email}`);
+            return cors(request, response, () => {
               response.sendStatus(200);
             });
           });
+      })
+      .catch((err) => {
+        error(`Register User | Error | ${err}`);
+        return cors(request, response, () => {
+          response.sendStatus(400);
+        });
       });
   });
