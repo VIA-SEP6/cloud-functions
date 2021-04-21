@@ -1,3 +1,5 @@
+const admin = require("firebase-admin");
+admin.initializeApp();
 const glob = require("glob");
 
 const files = glob.sync("./**/*.f.js", {

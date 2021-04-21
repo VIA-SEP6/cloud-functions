@@ -1,10 +1,8 @@
 const functions = require("firebase-functions");
 const cors = require("cors")({ origin: true });
 const { info, error } = require("../util/logger");
-// const { db, admin } = require("../util/adminDbUtil");
-const admin = require("firebase-admin");
-admin.initializeApp();
-const db = admin.firestore();
+const { db, admin } = require("../util/adminDbUtil");
+
 module.exports = functions
   .region("europe-west1")
   .https.onRequest(async (request, response) => {

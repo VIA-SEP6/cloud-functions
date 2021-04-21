@@ -18,6 +18,7 @@
   "main": "index.js",
   "dependencies": {
     "axios": "^0.21.1",
+    "cors": "^2.8.5",
     "firebase-admin": "^9.2.0",
     "firebase-functions": "^3.11.0",
     "glob": "^7.1.6"
@@ -29,6 +30,8 @@
   "private": true,
   "jest": {
     "testEnvironment": "node",
-    "testPathIgnorePatterns": ["./testExamples"]
+    "testPathIgnorePatterns": [
+      "./testExamples"
+    ]
   }
 }
