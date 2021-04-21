@@ -1,4 +1,3 @@
-const functions = require("firebase-functions");
 const glob = require("glob");
 
 const files = glob.sync("./**/*.f.js", {
