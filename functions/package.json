@@ -6,10 +6,12 @@
     "shell": "firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "initemu": "firebase init emulators; firebase functions:config:get > .runtimeconfig.json",
+    "emu": "EMU=true firebase emulators:start"
   },
   "engines": {
-    "node": "12"
+    "node": "10"
   },
   "main": "index.js",
   "dependencies": {
