@@ -64,5 +64,13 @@ node_modules/
 
 # dotenv environment variables file
 .env
-.idea
-
+sep6-service-account.json
+functions/node_modules
+functions/.runtimeconfig.json
+functions/.log
+.firebase
+firebase-debug.log
+*Keys.json
+*.log
+.vscode
+.idea/
