@@ -6,7 +6,7 @@ const {
 } = require('../services/movieTransformService');
 
 test('it should add URL to image poster path', () => {
-    const imagesBaseURL = 'https://image.tmdb.org/t/p/w500';
+	const imagesBaseURL = "https://image.tmdb.org/t/p/w500";
 	const validImage = '/8tZYtuWezp8JbcsvHYO0O46tFbo.jpg';
 	const validURLImage = imagesBaseURL + validImage;
 	expect(addURLToImagePosterPath(validImage)).toBe(validURLImage);

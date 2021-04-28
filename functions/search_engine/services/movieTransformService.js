@@ -25,7 +25,7 @@ const transformData = (data) => {
 };
 
 const addURLToImagePosterPath = (imagePosterPath) => {
-    const imagesBaseURL = 'https://image.tmdb.org/t/p/w500';
+	const imagesBaseURL = "https://image.tmdb.org/t/p/w500";
 
 	if (imagePosterPath) {
 		return imagesBaseURL + imagePosterPath;
