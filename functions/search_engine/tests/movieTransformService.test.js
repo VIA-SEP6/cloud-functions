@@ -2,12 +2,12 @@ const movieDataBeforeTransform = require("./testData/movieDataBeforeTransform.js
 const movieDataAfterTransform = require("./testData/movieDataAfterTransform.json");
 const movieDataAfterPosterPathAdd = require("./testData/movieDataAfterPosterPathAdd.json");
 const {
-  transformData,
+  removeUnnecessaryData,
   addURLToImagePosterPath,
 } = require("../services/searchMovieTransformService");
 
-test("it should remove unwanted", () => {
-  const result = transformData(movieDataBeforeTransform.data);
+test("it should remove unnecessary data", () => {
+  const result = removeUnnecessaryData(movieDataBeforeTransform.data);
   expect(result).toStrictEqual(movieDataAfterTransform.data);
 });
 
