@@ -1,6 +1,46 @@
 {
   "name": "functions",
   "description": "Cloud Functions for Firebase",
+  "xo": {
+    "singleQuote": false,
+    "prettier": true,
+    "extends": [
+      "plugin:jest/recommended"
+    ],
+    "rules": {
+      "quotes": [
+        "error",
+        "double"
+      ],
+      "unicorn/filename-case": "off",
+      "complexity": "off",
+      "capitalized-comments": "off",
+      "object-shorthand": "off",
+      "no-mixed-spaces-and-tabs": [
+        "error",
+        "smart-tabs"
+      ],
+      "unicorn/prevent-abbreviations": "off",
+      "unicorn/catch-error-name": [
+        "error",
+        {
+          "name": "err"
+        }
+      ],
+      "unicorn/import-index": "off",
+      "unicorn/no-array-callback-reference": "off",
+      "promise/prefer-await-to-then": "off",
+      "guard-for-in": "off",
+      "dot-notation": "off",
+      "no-negated-condition": "off",
+      "no-warning-comments": "off",
+      "max-params": "off",
+      "no-unused-vars": "off",
+      "no-console": "error",
+      "camelcase": "off",
+      "new-cap": "off"
+    }
+  },
   "scripts": {
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
@@ -21,7 +61,8 @@
     "cors": "^2.8.5",
     "firebase-admin": "^9.2.0",
     "firebase-functions": "^3.11.0",
-    "glob": "^7.1.6"
+    "glob": "^7.1.6",
+    "xo": "^0.39.1"
   },
   "devDependencies": {
     "firebase-functions-test": "^0.2.0",

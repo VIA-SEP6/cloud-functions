@@ -5,38 +5,39 @@ const { db, admin } = require("../util/adminDbUtil");
 
 module.exports = functions
   .region("europe-west1")
-  .https.onRequest(async (request, response) => {
-    const { username, password, email, age, country } = request.body;
-    if (!username || !password || !email)
+  .https.onRequest((request, response) => {
+    const userInfo = request.body.user;
+    if (!userInfo.username || !userInfo.password || !userInfo.email) {
       return cors(request, response, () => {
-        response.status(400).send({ data: "Missing mandatory fields" });
+        response
+          .status(400)
+          .send({ status: "400", message: "Missing mandatory fields" });
       });
-    await admin
+    }
+
+    admin
       .auth()
       .createUser({
-        email: email,
-        emailVerified: false,
-        password: password,
         disabled: false,
+        emailVerified: false,
+        email: userInfo.email,
+        emailVerified: false,
+        password: userInfo.password,
+        userInfo,
       })
       .then((user) => {
-        db.collection(`users`)
+        db.collection("users")
           .doc(`${user.uid}`)
-          .set({
-            email: email,
-            username: username,
-            age: age,
-            country: country,
-          })
+          .set(userInfo)
           .then(() => {
-            info(`Register User | Successful | ${email}`);
+            info(`Register User | Successful | ${user.uid}`);
             return cors(request, response, () => {
               response.sendStatus(200);
             });
           });
       })
-      .catch((err) => {
-        error(`Register User | Error | ${err}`);
+      .catch((error_) => {
+        error(`Register User | Error | ${error_}`);
         return cors(request, response, () => {
           response.sendStatus(400);
         });
