@@ -4,23 +4,10 @@ const movieDataAfterPosterPathAdd = require('./testData/movieDataAfterPosterPath
 const {
 	transformData,
 	addURLToImagePosterPath
-} = require('../services/movieTransformService');
-
-const keysToRemove = [
-	'adult',
-	'backdrop_path',
-	'genre_ids',
-	'original_language',
-	'original_title',
-	'overview',
-	'popularity',
-	'release_date',
-	'video',
-	'vote_count'
-];
+} = require('../services/searchMovieTransformService');
 
 test('it should remove unwanted', () => {
-	const result = transformData(movieDataBeforeTransform.data, keysToRemove);
+	const result = transformData(movieDataBeforeTransform.data);
 	expect(result).toStrictEqual(movieDataAfterTransform.data);
 });
 
