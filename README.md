@@ -11,5 +11,6 @@ const requestBody = {
   email: "david@via.dk",
   age: 22,
   country: "Denmark"
+  phone: "+4578451296"
 }
 ```
