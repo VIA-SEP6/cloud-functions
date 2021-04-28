@@ -1,24 +1,21 @@
-const keysToRemove = [
-  "adult",
-  "backdrop_path",
-  "genre_ids",
-  "original_language",
-  "original_title",
-  "overview",
-  "popularity",
-  "release_date",
-  "video",
-  "vote_count",
-];
+const {removeKeys} = require('../../util/jsonTransformService')
 
-const transformData = (data) => {
-  for (const result of data.results) {
-    for (const key of keysToRemove) {
-      delete result[key];
-    }
-  }
+const removeUnnecessaryData = (data) => {
 
-  return data;
+	const keysToRemove = [
+		'adult',
+		'backdrop_path',
+		'genre_ids',
+		'original_language',
+		'original_title',
+		'overview',
+		'popularity',
+		'release_date',
+		'video',
+		'vote_count'
+	];
+
+	return removeKeys(data, keysToRemove);
 };
 
 const addURLToImagePosterPath = (data) => {
@@ -34,6 +31,6 @@ const addURLToImagePosterPath = (data) => {
 };
 
 module.exports = {
-  transformData,
+  removeUnnecessaryData,
   addURLToImagePosterPath,
 };
