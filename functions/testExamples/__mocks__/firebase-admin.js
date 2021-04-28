@@ -1,8 +1,8 @@
 module.exports = {
-    database() {
-        return 'mocked database'
-    },
-    firestore() {
-        return 'mocked firestore'
-    }
-}
+	database() {
+		return "mocked database";
+	},
+	firestore() {
+		return "mocked firestore";
+	}
+};

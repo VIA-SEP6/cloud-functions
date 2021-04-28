@@ -3,7 +3,7 @@ const rtdb = admin.database();
 const db = admin.firestore();
 
 module.exports = {
-  admin: admin,
-  rtdb: rtdb,
-  db: db,
+	admin: admin,
+	rtdb: rtdb,
+	db: db
 };

@@ -4,9 +4,6 @@
   "xo": {
     "singleQuote": false,
     "prettier": true,
-    "extends": [
-      "plugin:jest/recommended"
-    ],
     "rules": {
       "quotes": [
         "error",

@@ -1,0 +1,48 @@
+{
+    "data": {
+        "page": 1,
+        "results": [
+            {
+                "adult": false,
+                "backdrop_path": "/nlCHUWjY9XWbuEUQauCBgnY8ymF.jpg",
+                "genre_ids": [
+                    28,
+                    12,
+                    878
+                ],
+                "id": 76341,
+                "original_language": "en",
+                "original_title": "Mad Max: Fury Road",
+                "overview": "An apocalyptic story set in the furthest reaches of our planet, in a stark desert landscape where humanity is broken, and most everyone is crazed fighting for the necessities of life. Within this world exist two rebels on the run who just might be able to restore order.",
+                "popularity": 60.82,
+                "poster_path": "/8tZYtuWezp8JbcsvHYO0O46tFbo.jpg",
+                "release_date": "2015-05-13",
+                "title": "Mad Max: Fury Road",
+                "video": false,
+                "vote_average": 7.5,
+                "vote_count": 17922
+            },
+            {
+                "adult": false,
+                "backdrop_path": "/iojuitFQi3Rb05ps7rBhJTdnYGs.jpg",
+                "genre_ids": [
+                    12,
+                    28,
+                    53,
+                    878
+                ],
+                "id": 9659,
+                "original_language": "en",
+                "original_title": "Mad Max",
+                "overview": "Taking place in a dystopian Australia in the near future, Mad Max tells the story of a highway patrolman cruising the squalid back roads that have become the breeding ground of criminals foraging for gasoline and scraps. After some grisly events at the hands of a motorcycle gang, Max sets out across the barren wastelands in search of revenge.",
+                "popularity": 20.826,
+                "poster_path": "/5LrI4GiCSrChgkdskVZiwv643Kg.jpg",
+                "release_date": "1979-04-12",
+                "title": "Mad Max",
+                "video": false,
+                "vote_average": 6.7,
+                "vote_count": 3009
+            }
+        ]
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "data": {
+        "page": 1,
+        "results": [
+            {
+                "id": 76341,
+                "poster_path": "https://image.tmdb.org/t/p/w500/8tZYtuWezp8JbcsvHYO0O46tFbo.jpg",
+                "title": "Mad Max: Fury Road",
+                "vote_average": 7.5
+            },
+            {
+                "id": 9659,
+                "poster_path": "https://image.tmdb.org/t/p/w500/5LrI4GiCSrChgkdskVZiwv643Kg.jpg",
+                "title": "Mad Max",
+                "vote_average": 6.7
+            }
+        ]
+    }
+}
