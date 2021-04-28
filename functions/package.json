@@ -45,7 +45,7 @@
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
     "initemu": "firebase init emulators; firebase functions:config:get > .runtimeconfig.json",
-    "emu": "EMU=true firebase emulators:start",
+    "emu": "firebase emulators:start",
     "test": "jest",
     "test-watch": "jest --watch"
   },
