@@ -1,7 +1,6 @@
-const {removeKeys} = require('../../util/jsonTransformService')
+const {removeKeys} = require('../../util/jsonTransformService');
 
 const removeUnnecessaryData = (data) => {
-
 	const keysToRemove = [
 		'adult',
 		'backdrop_path',
@@ -18,18 +17,18 @@ const removeUnnecessaryData = (data) => {
 };
 
 const addURLToImagePosterPath = (data) => {
-  const imagesBaseURL = "https://image.tmdb.org/t/p/w500";
+	const imagesBaseURL = "https://image.tmdb.org/t/p/w500";
 
-  for (const result of data.results) {
-    if (result["poster_path"]) {
-      result["poster_path"] = imagesBaseURL + result["poster_path"];
-    }
-  }
+	for (const result of data.results) {
+		if (result["poster_path"]) {
+			result["poster_path"] = imagesBaseURL + result["poster_path"];
+		}
+	}
 
-  return data;
+	return data;
 };
 
 module.exports = {
-  removeUnnecessaryData,
-  addURLToImagePosterPath,
+	removeUnnecessaryData,
+	addURLToImagePosterPath
 };
