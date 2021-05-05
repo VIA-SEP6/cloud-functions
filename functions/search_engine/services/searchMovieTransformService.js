@@ -8,7 +8,6 @@ const removeUnnecessaryData = (data) => {
 		'genre_ids',
 		'original_language',
 		'original_title',
-		'overview',
 		'popularity',
 		'release_date',
 		'video',
