@@ -1,6 +1,12 @@
 const functions = require("firebase-functions");
 const { info, error } = require("../util/logger");
 const { db, admin } = require("../util/adminDbUtil");
+const {
+  likeTopic,
+  dislikeTopic,
+  clearReactionFromTopic,
+} = require("../util/reactions/reactionService");
+
 module.exports = {
   add: functions.region("europe-west1").https.onCall(async (data) => {
     const { review } = data;
@@ -23,9 +29,39 @@ module.exports = {
         return { status: 400, message: "Review added" };
       });
   }),
-  like: functions.region("europe-west1").https.onCall(async (data) => {}),
-  dislike: functions.region("europe-west1").https.onCall(async (data) => {}),
+  like: functions.region("europe-west1").https.onCall(async (data) => {
+    if (!data.userUid || !data.reviewId)
+      return { status: 404, message: "Missing required fields" };
+    return likeTopic("reviews", data.reviewId, data.userUid)
+      .then(() => {
+        return { status: 200, message: "Successfully liked" };
+      })
+      .catch((err) => {
+        return { error: err };
+      });
+  }),
+  dislike: functions.region("europe-west1").https.onCall(async (data) => {
+    if (!data.userUid || !data.reviewId)
+      return { status: 404, message: "Missing required fields" };
+    return dislikeTopic("reviews", data.reviewId, data.userUid)
+      .then(() => {
+        return { status: 200, message: "Missing required fields" };
+      })
+      .catch((err) => {
+        return { error: err };
+      });
+  }),
   removeReaction: functions
     .region("europe-west1")
-    .https.onCall(async (data) => {}),
+    .https.onCall(async (data) => {
+      if (!data.userUid || !data.reviewId)
+        return { status: 404, message: "Missing required fields" };
+      return clearReactionFromTopic("reviews", data.reviewId, data.userUid)
+        .then(() => {
+          return { status: 200, message: "Successfully removed reaction" };
+        })
+        .catch((err) => {
+          return { error: err };
+        });
+    }),
 };
