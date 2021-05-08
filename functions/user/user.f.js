@@ -4,7 +4,7 @@ const { db, admin } = require("../util/adminDbUtil");
 module.exports = {
   register: functions.region("europe-west1").https.onCall(async (data) => {
     const { user } = data;
-    if (!user) return { status: 404, message: "Missing user info" };
+    if (!user) return { status: 400, message: "Missing user info" };
 
     return admin
       .auth()
