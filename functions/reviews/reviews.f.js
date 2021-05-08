@@ -1,6 +1,6 @@
 const functions = require("firebase-functions");
 const { info, error } = require("../util/logger");
-const { db, admin } = require("../util/adminDbUtil");
+const { db } = require("../util/adminDbUtil");
 const {
   likeTopic,
   dislikeTopic,
@@ -9,16 +9,26 @@ const {
 
 module.exports = {
   add: functions.region("europe-west1").https.onCall(async (data) => {
-    const { review } = data;
-    if (!review) return { status: 400, message: "Missing review" };
-    const { movieId, userId, description, rating } = review;
+    const { movieId, description, rating, userId } = data;
+
     if (!movieId || !userId || !description || !rating)
       return { status: 400, message: "Missing required fields" };
-    const revObj = { ...review, timestamp: new Date(), likes: [] };
+
+    const userDoc = await db.collection("users").doc(`${userId}`).get();
+    const user = userDoc.data();
+    if (!user) return { status: 404, message: "User not found" };
+    const revObj = {
+      movieId,
+      description,
+      rating,
+      userId,
+      timestamp: new Date(),
+      user,
+      likes: [],
+      dislikes: [],
+    };
     return db
       .collection("reviews")
-      .doc(`${movieId}`)
-      .collection(`review`)
       .doc()
       .set(revObj, { merge: true })
       .then(() => {
@@ -30,9 +40,10 @@ module.exports = {
       });
   }),
   like: functions.region("europe-west1").https.onCall(async (data) => {
-    if (!data.userUid || !data.reviewId)
-      return { status: 404, message: "Missing required fields" };
-    return likeTopic("reviews", data.reviewId, data.userUid)
+    const { userId, reviewId } = data;
+    if (!userId || !reviewId)
+      return { status: 400, message: "Missing required fields" };
+    return likeTopic("reviews", reviewId, userId)
       .then(() => {
         return { status: 200, message: "Successfully liked" };
       })
@@ -41,11 +52,12 @@ module.exports = {
       });
   }),
   dislike: functions.region("europe-west1").https.onCall(async (data) => {
-    if (!data.userUid || !data.reviewId)
-      return { status: 404, message: "Missing required fields" };
-    return dislikeTopic("reviews", data.reviewId, data.userUid)
+    const { userId, reviewId } = data;
+    if (!userId || !reviewId)
+      return { status: 400, message: "Missing required fields" };
+    return dislikeTopic("reviews", reviewId, userId)
       .then(() => {
-        return { status: 200, message: "Missing required fields" };
+        return { status: 200, message: "Successfully disliked" };
       })
       .catch((err) => {
         return { error: err };
@@ -54,9 +66,10 @@ module.exports = {
   removeReaction: functions
     .region("europe-west1")
     .https.onCall(async (data) => {
-      if (!data.userUid || !data.reviewId)
-        return { status: 404, message: "Missing required fields" };
-      return clearReactionFromTopic("reviews", data.reviewId, data.userUid)
+      const { userId, reviewId } = data;
+      if (!userId || !reviewId)
+        return { status: 400, message: "Missing required fields" };
+      return clearReactionFromTopic("reviews", reviewId, userId)
         .then(() => {
           return { status: 200, message: "Successfully removed reaction" };
         })
