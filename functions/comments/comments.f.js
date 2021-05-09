@@ -8,7 +8,7 @@ const {
 } = require("../util/reactions/reactionService");
 module.exports = {
   add: functions.region("europe-west1").https.onCall(async (data) => {
-    const { content, userId, movieId } = data;
+    const { content, userId, movieId, parent } = data;
     if (!userId || !content || !movieId)
       return { status: 400, message: "Missing required fields" };
 
