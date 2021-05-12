@@ -1,6 +1,6 @@
 const functions = require("firebase-functions");
-const {info, error} = require("../util/logger");
-const {db, admin} = require("../util/adminDbUtil");
+const { info, error } = require("../util/logger");
+const { db, admin } = require("../util/adminDbUtil");
 module.exports = {
   register: functions.region("europe-west1").https.onCall(async (data) => {
     const { userName, password, email, userInfo } = data;
@@ -14,8 +14,7 @@ module.exports = {
         emailVerified: false,
         email: email,
         password: password,
-        userName,
-        userInfo,
+        displayName: userName,
       })
       .then((user) => {
         return db
@@ -40,8 +39,8 @@ module.exports = {
     if (!userDoc.exists)
       throw new HttpsError("aborted", "User does not exist.");
 
-		return {status: 200, message: {user: userDoc.data()}};
-	}),
+    return { status: 200, message: { user: userDoc.data() } };
+  }),
 
   updateProfile: functions.region("europe-west1").https.onCall(async (data) => {
     const { user, userId } = data;
