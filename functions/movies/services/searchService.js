@@ -35,7 +35,8 @@ const getMovies = async(keyword) => {
     return data;
   }
   catch (error) {
-    console.log(error);
+    error(`Search Service ---> getMovies | Error | ${err}`)
+    return error;
   }
 }
 
