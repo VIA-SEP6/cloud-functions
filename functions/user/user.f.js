@@ -3,23 +3,25 @@ const { info, error } = require("../util/logger");
 const { db, admin } = require("../util/adminDbUtil");
 module.exports = {
   register: functions.region("europe-west1").https.onCall(async (data) => {
-    const { user } = data;
-    if (!user) return { status: 400, message: "Missing user info" };
+    const { userName, password, email, userInfo } = data;
+    if (!userName || !password || !email)
+      throw new HttpsError("failed-precondition", "Missing required data.");
 
     return admin
       .auth()
       .createUser({
         disabled: false,
         emailVerified: false,
-        email: user.email,
-        password: user.password,
-        user,
+        email: email,
+        password: password,
+        userName,
+        userInfo,
       })
       .then((user) => {
         return db
           .collection("users")
           .doc(`${user.uid}`)
-          .set(user, { merge: true })
+          .set({ ...userInfo, email, userName }, { merge: true })
           .then(() => {
             info(`Register User | Successful | ${user.uid}`);
             return { status: 200, message: { user: user.uid } };
@@ -27,33 +29,65 @@ module.exports = {
       })
       .catch((err) => {
         error(`Register User | Error | ${err}`);
-        return { status: 500, message: "User not registered" };
+        throw new HttpsError("aborted", "User not registered.");
       });
   }),
 
   getProfile: functions.region("europe-west1").https.onCall(async (data) => {
-    const { userUid } = data;
-    const docRef = db.collection("users").doc(`${userUid}`);
+    const { userId } = data;
+    const docRef = db.collection("users").doc(`${userId}`);
     const userDoc = await docRef.get();
-    if (!userDoc.exists) {
-      return { status: 404, message: "User does not exist" };
-    }
+    if (!userDoc.exists)
+      throw new HttpsError("aborted", "User does not exist.");
 
     return { status: 200, message: { user: userDoc.data() } };
   }),
 
   updateProfile: functions.region("europe-west1").https.onCall(async (data) => {
-    const { user, userUid } = data;
-    const docRef = db.collection("users").doc(`${userUid}`);
+    const { user, userId } = data;
+    if (!userId)
+      throw new HttpsError("failed-precondition", "Missing required data.");
+
+    const docRef = db.collection("users").doc(`${userId}`);
     const userDoc = await docRef.get();
-    if (!userDoc.exists) return { status: 403, message: "Access forbidden" };
+    if (!userDoc.exists)
+      throw new HttpsError("aborted", "User does not exist.");
     return db
       .collection("users")
-      .doc(`${userUid}`)
+      .doc(`${userId}`)
       .set(user, { merge: true })
       .then(() => {
-        info(`Update User | Successful | ${userUid}`);
-        return { status: 200, message: { update_sucessful: userUid } };
+        info(`Update User | Successful | ${userId}`);
+        return { status: 200, message: { update_sucessful: userId } };
       });
   }),
+
+  getFavouriteMovies: functions
+    .region("europe-west1")
+    .https.onCall(async (data) => {
+      const { userId } = data;
+      const docRef = db.collection("users").doc(`${userId}`);
+      const userDoc = await docRef.get();
+      if (!userDoc.exists)
+        return { status: 400, message: "User does not exist" };
+      return userDoc.favouriteMovies;
+    }),
+
+  addFavouriteMovie: functions
+    .region("europe-west1")
+    .https.onCall(async (data) => {
+      const { userId, movieId } = data;
+      const docRef = db.collection("users").doc(`${userId}`);
+      const userDoc = await docRef.get();
+      if (!userDoc.exists)
+        return { status: 400, message: "User does not exist" };
+      return db
+        .collection("users")
+        .doc(`${user.uid}`)
+        .set({ favouriteMovies }, { merge: true })
+        .then(() => {
+          info(`Register User | Successful | ${user.uid}`);
+          return { status: 200, message: { user: user.uid } };
+        });
+    }),
 };
