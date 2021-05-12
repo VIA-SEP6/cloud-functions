@@ -29,9 +29,9 @@ const getMovie = async (id, append_to_response) => {
 		});
 		return data;
 	}
-	catch (error) {
+	catch (err) {
 		error(`Movie Service ---> getMovie | Error | ${err}`)
-		return error;
+		return err;
 	}
 }
 
