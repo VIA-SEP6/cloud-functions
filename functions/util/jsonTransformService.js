@@ -20,7 +20,29 @@ const removeKeys = (json, keys) => {
 	return json;
 };
 
+const preAppendToKeyValue = (json, key, value) => {
+	for (const property in json) {
+		if (json.hasOwnProperty(property)) {
+			if (property == key && json[property]) {
+				json[property] = value + json[property];
+			} else if (typeof json[property] === "object") {
+				preAppendToKeyValue(json[property], key, value);
+			}
+		}
+	}
+	return json;
+}
+
+const preAppendValueToMultipleKeys = (json, keys, value) => {
+	for (const key of keys) {
+		json = preAppendToKeyValue(json,key,value)
+	}
+	return json;
+}
+
 module.exports = {
 	removeKey,
-	removeKeys
+	removeKeys,
+	preAppendToKeyValue,
+	preAppendValueToMultipleKeys
 };
