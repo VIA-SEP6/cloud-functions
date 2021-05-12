@@ -8,7 +8,7 @@ Creates a new user account<br>
 ```js
 const requestBody = {
 data:{
-  username: "David",
+  userName: "David",
   password: "theBestOne",
   email: "david@via.dk",
   userInfo: {
@@ -44,7 +44,7 @@ const requestBody = {
 data:{
   userId: "ugqkdgybwh549849",
   user:{
-     username: "Dorcia",
+     userName: "Dorcia",
      phone: "68485165469"
   }
    }
