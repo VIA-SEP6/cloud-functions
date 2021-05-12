@@ -10,6 +10,7 @@ const addURLToImages = (data) => {
 
 const addTMAVoteAverage = async (data) => {
 	data["tma_vote_average"] = await getMovieRating(data.id);
+    
 	return data;
 };
 
