@@ -50,7 +50,7 @@ const getMovieRating = async (movieId) => {
 const getTopMovies = async (limit) => {
 	const topMovies = await db
 		.collection("movies")
-		.orderBy("avgRating")
+		.orderBy("avgRating", 'desc')
 		.limit(limit)
 		.get();
 
