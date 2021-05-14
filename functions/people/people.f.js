@@ -1,4 +1,5 @@
 const functions = require("firebase-functions");
+const { HttpsError } = require("firebase-functions/lib/providers/https");
 const {getPersonRequest} = require("./services/peopleAPIService");
 
 module.exports = {
@@ -6,12 +7,12 @@ module.exports = {
         const {id} = data;
         
         if (!id)
-        throw new HttpsError("failed - precondition", "missing id");
+        throw new HttpsError('invalid-argument',"Missing id")
 
         const result = await getPersonRequest(id);
 
         if (!result)
-        throw new HttpsError("failed", "server error");
+        throw new HttpsError('internal');
 
         return { status: 200, message: { person: result } };
     }),
