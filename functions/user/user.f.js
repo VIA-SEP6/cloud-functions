@@ -27,6 +27,7 @@ module.exports = {
 					.doc(`${user.uid}`)
 					.set({...userInfo, email, userName}, {merge: true})
 					.then(() => {
+
 						info(`Register User | Successful | ${user.uid}`);
 						return {status: 200, message: {user: user.uid}};
 					});
