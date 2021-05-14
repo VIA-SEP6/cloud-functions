@@ -1,78 +1,68 @@
 const functions = require("firebase-functions");
-const {info, error} = require("../util/logger");
-const {db} = require("../util/adminDbUtil");
 const {
 	likeTopic,
 	dislikeTopic,
 	clearReactionFromTopic
-} = require("../reactions/reactionService");
+} = require("../util/reactions/reactionService");
+const {HttpsError} = require("firebase-functions/lib/providers/https");
+const {addComment} = require("./services/commentsDAService");
+
 module.exports = {
 	add: functions.region("europe-west1").https.onCall(async (data) => {
 		const {content, userId, movieId, parent} = data;
 		if (!userId || !content || !movieId)
-			return {status: 400, message: "Missing required fields"};
+			throw new HttpsError("invalid-argument", "Required fields");
 
-		const userDoc = await db.collection("users").doc(`${userId}`).get();
-		const user = userDoc.data();
-		if (!user) return {status: 404, message: "User not found"};
-		const commentObj = {
-			movieId,
-			content,
-			userId,
-			timestamp: new Date(),
-			user,
-			likes: [],
-			dislikes: []
-		};
-		return db
-			.collection("comments")
-			.doc()
-			.set(commentObj, {merge: true})
+		return addComment(content, userId, movieId, parent)
 			.then(() => {
-				info(`add-comment | Sucessful | ${commentObj}`);
-				return {status: 201, message: "Comment added"};
+				return {status: 200, message: "Commend added"};
 			})
 			.catch((err) => {
-				err(`add-comment | Error | ${err}`);
-				return {status: 400, message: "Comment added"};
+				throw new HttpsError("internal", err);
 			});
 	}),
 	like: functions.region("europe-west1").https.onCall(async (data) => {
 		const {userId, commentId} = data;
+
 		if (!userId || !commentId)
-			return {status: 400, message: "Missing required fields"};
+			throw new HttpsError("invalid-argument", "Missing id");
+
 		return likeTopic("comments", commentId, userId)
 			.then(() => {
 				return {status: 200, message: "Successfully liked"};
 			})
 			.catch((err) => {
-				return {error: err};
+				throw new HttpsError("internal", err);
 			});
 	}),
 	dislike: functions.region("europe-west1").https.onCall(async (data) => {
 		const {userId, commentId} = data;
+
 		if (!userId || !commentId)
-			return {status: 400, message: "Missing required fields"};
+			throw new HttpsError("invalid-argument", "Missing id");
+
 		return dislikeTopic("comments", commentId, userId)
 			.then(() => {
 				return {status: 200, message: "Successfully disliked"};
 			})
 			.catch((err) => {
-				return {error: err};
+				throw new HttpsError("internal", err);
 			});
 	}),
 	removeReaction: functions
 		.region("europe-west1")
 		.https.onCall(async (data) => {
 			const {userId, commentId} = data;
+
 			if (!userId || !commentId)
-				return {status: 400, message: "Missing required fields"};
+				throw new HttpsError("invalid-argument", "Missing required fields");
+
 			return clearReactionFromTopic("comments", commentId, userId)
 				.then(() => {
 					return {status: 200, message: "Successfully removed reaction"};
 				})
 				.catch((err) => {
-					return {error: err};
+					throw new HttpsError("internal", err);
 				});
 		})
 };

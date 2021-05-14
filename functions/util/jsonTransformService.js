@@ -30,15 +30,17 @@ const preAppendToKeyValue = (json, key, value) => {
 			}
 		}
 	}
+
 	return json;
-}
+};
 
 const preAppendValueToMultipleKeys = (json, keys, value) => {
 	for (const key of keys) {
-		json = preAppendToKeyValue(json,key,value)
+		json = preAppendToKeyValue(json, key, value);
 	}
+
 	return json;
-}
+};
 
 module.exports = {
 	removeKey,

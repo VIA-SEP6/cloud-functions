@@ -5,7 +5,7 @@ const {
 	likeTopic,
 	dislikeTopic,
 	clearReactionFromTopic
-} = require("../reactions/reactionService");
+} = require("../util/reactions/reactionService");
 
 module.exports = {
 	add: functions.region("europe-west1").https.onCall(async (data) => {

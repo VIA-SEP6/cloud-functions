@@ -47,7 +47,24 @@ const getMovieRating = async (movieId) => {
 	return movieDoc.data().avgRating;
 };
 
+const getTopMovies = async (limit) => {
+	const topMovies = await db
+		.collection("movies")
+		.orderBy("avgRating")
+		.limit(limit)
+		.get();
+
+	const movies = [];
+
+	for (const document of topMovies) {
+		movies.push({movieId: document.id});
+	}
+
+	return movies;
+};
+
 module.exports = {
 	updateMovieReviewRating,
-	getMovieRating
+	getMovieRating,
+	getTopMovies
 };

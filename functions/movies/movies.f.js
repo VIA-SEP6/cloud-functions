@@ -1,6 +1,10 @@
 const functions = require("firebase-functions");
 const cors = require("cors")({origin: true});
-const {getMovieRequest} = require("./services/movieAPIService");
+const {
+	getMovieRequest,
+	getMoviesRequest,
+	getTopRatedMoviesRequest
+} = require("./services/movieAPIService");
 const {searchMovieGetRequest} = require("./services/searchAPIService");
 
 module.exports = {
@@ -19,6 +23,52 @@ module.exports = {
 					});
 				})
 				.catch((err) => {
+					return cors(request, response, () => {
+						response.sendStatus(500);
+					});
+				});
+		}),
+	getPopular: functions
+		.region("europe-west1")
+		.https.onRequest(async (request, response) => {
+			await getMoviesRequest('popular')
+				.then((result) => {
+					return cors(request, response, () => {
+						response.status(200).send({data: result});
+					});
+				})
+				.catch((err) => {
+					return cors(request, response, () => {
+						response.sendStatus(500);
+					});
+				});
+		}),
+	getUpcoming: functions
+		.region("europe-west1")
+		.https.onRequest(async (request, response) => {
+			await getMoviesRequest('upcoming')
+				.then((result) => {
+					return cors(request, response, () => {
+						response.status(200).send({data: result});
+					});
+				})
+				.catch((err) => {
+					return cors(request, response, () => {
+						response.sendStatus(500);
+					});
+				});
+		}),
+	getTopRated: functions
+		.region("europe-west1")
+		.https.onRequest(async (request, response) => {
+			await getTopRatedMoviesRequest()
+				.then((result) => {
+					return cors(request, response, () => {
+						response.status(200).send({data: result});
+					});
+				})
+				.catch((err) => {
+					console.log(err);
 					return cors(request, response, () => {
 						response.sendStatus(500);
 					});

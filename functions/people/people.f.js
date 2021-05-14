@@ -1,19 +1,17 @@
 const functions = require("firebase-functions");
-const { HttpsError } = require("firebase-functions/lib/providers/https");
+const {HttpsError} = require("firebase-functions/lib/providers/https");
 const {getPersonRequest} = require("./services/peopleAPIService");
 
 module.exports = {
-    get: functions.region("europe-west1").https.onCall(async (data) => {
-        const {id} = data;
-        
-        if (!id)
-        throw new HttpsError('invalid-argument',"Missing id")
+	get: functions.region("europe-west1").https.onCall(async (data) => {
+		const {id} = data;
 
-        const result = await getPersonRequest(id);
+		if (!id) throw new HttpsError("invalid-argument", "Missing id");
 
-        if (!result)
-        throw new HttpsError('internal');
+		const result = await getPersonRequest(id);
 
-        return { status: 200, message: { person: result } };
-    }),
-}
+		if (!result) throw new HttpsError("internal");
+
+		return {status: 200, message: {person: result}};
+	})
+};

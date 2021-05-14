@@ -1,4 +1,7 @@
-const {removeKeys,preAppendToKeyValue} = require("../../util/jsonTransformService");
+const {
+	removeKeys,
+	preAppendToKeyValue
+} = require("../../util/jsonTransformService");
 const {getMovieRating} = require("./movieDAService");
 
 const removeUnnecessaryData = (data) => {
@@ -20,7 +23,7 @@ const removeUnnecessaryData = (data) => {
 const addURLToImagePosterPath = (data) => {
 	const imagesBaseURL = "https://image.tmdb.org/t/p/w500";
 
-	return preAppendToKeyValue(data,"poster_path",imagesBaseURL);
+	return preAppendToKeyValue(data, "poster_path", imagesBaseURL);
 };
 
 const addTMAVoteAverage = async (data) => {
