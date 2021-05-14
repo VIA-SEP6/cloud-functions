@@ -1,7 +1,7 @@
 const functions = require("firebase-functions");
 const cors = require("cors")({origin: true});
-const {getMovieRequest} = require("./services/movieService");
-const {searchMovieGetRequest} = require("./services/searchService");
+const {getMovieRequest} = require("./services/movieAPIService");
+const {searchMovieGetRequest} = require("./services/searchAPIService");
 
 module.exports = {
 	get: functions

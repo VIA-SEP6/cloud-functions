@@ -33,7 +33,7 @@ const createMovie = async (movieId) => {
 		.doc(movieId)
 		.set({avgRating: 0, numRatings: 0})
 		.catch((err) => {
-			error(`Create Movie | Error | ${err}`);
+			error(`Movie Data Access Service ---> Create Movie | Error | ${err}`);
 		});
 };
 

@@ -30,7 +30,7 @@ const getMovie = async (id, append_to_response) => {
 		return data;
 	}
 	catch (err) {
-		error(`Movie Service ---> getMovie | Error | ${err}`)
+		error(`Movie API Service ---> getMovie | Error | ${err}`)
 		return err;
 	}
 }

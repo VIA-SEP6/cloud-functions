@@ -1,11 +1,10 @@
 const axios = require("axios");
-const functions = require("firebase-functions");
 const { tmdbKey } = require("../../envConfigVariables");
 const {
   removeUnnecessaryData,
   addURLToImagePosterPath,
   addTMAVoteAverage
-} = require("../services/searchMovieTransformService");
+} = require("./searchMovieTransformService");
 
 const axiosInstance = axios.create({
   baseURL: "https://api.themoviedb.org/3/search",
@@ -35,7 +34,7 @@ const getMovies = async(keyword) => {
     return data;
   }
   catch (err) {
-    error(`Search Service ---> getMovies | Error | ${err}`)
+    error(`Search API Service ---> getMovies | Error | ${err}`)
     return err;
   }
 }
