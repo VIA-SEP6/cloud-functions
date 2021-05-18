@@ -6,7 +6,8 @@ const {
 	addTMAVoteAverageToMultipleMovies,
 	limitResults,
 	removePagination,
-	filterMovieDetails
+	filterMovieDetails,
+	overwriteIMDBVotesWithTMA
 } = require('./movieTransformService.js');
 const {getTopMovies} = require('./movieDAService.js');
 const {error} = require("../../util/logger");
@@ -51,6 +52,7 @@ const getTopRatedMoviesInstance = axios.create({
 			data["tma_results"] = await prepareTMATopRatedMovies(limit);
 			data = addURLToImages(data);
 			data = await addTMAVoteAverageToMultipleMovies(data);
+			data = overwriteIMDBVotesWithTMA(data);
 
 			return data;
 		}

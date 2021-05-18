@@ -29,22 +29,19 @@ const updateMovieReviewRating = async (data) => {
 };
 
 const createMovie = async (movieId) => {
-	db.collection("movies")
+	return db.collection("movies")
 		.doc(movieId)
 		.set({avgRating: 0, numRatings: 0})
-		.catch((err) => {
-			error(`Movie Data Access Service ---> Create Movie | Error | ${err}`);
-		});
 };
 
 const getMovieRating = async (movieId) => {
 	const movieRef = db.collection('movies').doc(String(movieId));
 	const movieDoc = await movieRef.get();
 	if (!movieDoc.exists) {
-		return 0;
+		return {avgRating: 0, numRatings: 0};
 	}
 
-	return movieDoc.data().avgRating;
+	return {avgRating: movieDoc.data().avgRating, numRatings: movieDoc.data().numRatings};
 };
 
 const getTopMovies = async (limit) => {
