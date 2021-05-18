@@ -17,18 +17,34 @@ const addURLToImages = (data) => {
 };
 
 const addTMAVoteAverage = async (data) => {
-	data["tma_vote_average"] = await getMovieRating(data.id);
+
+	const {avgRating, numRatings} = await getMovieRating(data.id);
+
+	data["tma_vote_average"] = avgRating;
+	data["tma_vote_count"] = numRatings;
 
 	return data;
 };
 
 const addTMAVoteAverageToMultipleMovies = async (data) => {
 	for (const result of data.results) {
-		result["tma_vote_average"] = await getMovieRating(result.id);
+		const {avgRating, numRatings} = await getMovieRating(data.id);
+
+		result["tma_vote_average"] = avgRating;
+		result["tma_vote_count"] = numRatings;
 	}
 
 	return data;
 };
+
+const overwriteIMDBVotesWithTMA = async (data) => {
+	for (const result of data['tma_results']) {
+		result["vote_average"] = result["tma_vote_average"];
+		result["vote_count"] = result["tma_vote_count"];
+	}
+
+	return data;
+}
 
 const limitResults = (limit, data) => {
 	data.results = data.results.slice(0, limit);
@@ -61,5 +77,6 @@ module.exports = {
 	addTMAVoteAverageToMultipleMovies,
 	limitResults,
 	removePagination,
-	filterMovieDetails
+	filterMovieDetails,
+	overwriteIMDBVotesWithTMA
 };
