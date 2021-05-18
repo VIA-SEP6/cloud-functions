@@ -5,9 +5,10 @@ module.exports = functions
 	.region("europe-west1")
 	.firestore.document("reviews/{reviewId}")
 	.onCreate(async (snap, context) => {
+		const rating = snap.data().rating
 		const data = {
-			movieId: snap.data().movieId,
-			rating: snap.data().rating
+			movieId: `${snap.data().movieId}`,
+			rating: parseFloat(rating)
 		};
-		updateMovieReviewRating(data);
+		await updateMovieReviewRating(data);
 	});
