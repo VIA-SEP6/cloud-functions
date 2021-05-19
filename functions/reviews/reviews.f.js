@@ -1,4 +1,6 @@
 const functions = require("firebase-functions");
+const {HttpsError} = require("firebase-functions/lib/providers/https");
+const {authenticateAndGetUserIdFromContext} = require("../util/authentication");
 const {info, error} = require("../util/logger");
 const {db} = require("../util/adminDbUtil");
 const {
@@ -8,17 +10,18 @@ const {
 } = require("../util/reactions/reactionService");
 
 module.exports = {
-	add: functions.region("europe-west1").https.onCall(async (data) => {
-		const {movieId, description, rating, userId} = data;
+	add: functions.region("europe-west1").https.onCall(async (data, context) => {
+		const userId = authenticateAndGetUserIdFromContext(context)
+		const {movieId, description, rating} = data;
 
-		if (!movieId || !userId || !description || !rating)
-			return {status: 400, message: "Missing required fields"};
+		if (!movieId || !description || !rating)
+			new HttpsError('failed-precondition', 'Missing required data.')
 
 		const userDoc = await db.collection("users").doc(`${userId}`).get();
 		const user = userDoc.data();
-		if (!user) return {status: 404, message: "User not found"};
+		if (!user) new HttpsError('not-found', 'User not found')
 		const revObj = {
-			movieId,
+			movieId: `${movieId}`, // To make sure its always a string
 			description,
 			rating,
 			userId,
@@ -32,49 +35,43 @@ module.exports = {
 			.doc()
 			.set(revObj, {merge: true})
 			.then(() => {
-				info(`add-review | Sucessful | ${revObj}`);
-				return {status: 201, message: "Review added"};
+				info(`add-review | Successful | ${revObj}`);
+				return {successful: true};
 			})
-			.catch((err) => {
-				return {status: 400, message: "Review added"};
-			});
 	}),
-	like: functions.region("europe-west1").https.onCall(async (data) => {
-		const {userId, reviewId} = data;
-		if (!userId || !reviewId)
-			return {status: 400, message: "Missing required fields"};
+	like: functions.region("europe-west1").https.onCall(async (data, context) => {
+		const userId = authenticateAndGetUserIdFromContext(context)
+		const {reviewId} = data;
+		if (!reviewId)
+			new HttpsError('failed-precondition', 'Missing required data')
 		return likeTopic("reviews", reviewId, userId)
 			.then(() => {
-				return {status: 200, message: "Successfully liked"};
+				return {successful: true};
 			})
 			.catch((err) => {
 				return {error: err};
 			});
 	}),
-	dislike: functions.region("europe-west1").https.onCall(async (data) => {
-		const {userId, reviewId} = data;
-		if (!userId || !reviewId)
-			return {status: 400, message: "Missing required fields"};
+	dislike: functions.region("europe-west1").https.onCall(async (data, context) => {
+		const userId = authenticateAndGetUserIdFromContext(context)
+		const {reviewId} = data;
+		if (!reviewId)
+			new HttpsError('failed-precondition', 'Missing required data')
 		return dislikeTopic("reviews", reviewId, userId)
 			.then(() => {
-				return {status: 200, message: "Successfully disliked"};
+				return {successful: true};
 			})
-			.catch((err) => {
-				return {error: err};
-			});
 	}),
 	removeReaction: functions
 		.region("europe-west1")
-		.https.onCall(async (data) => {
-			const {userId, reviewId} = data;
-			if (!userId || !reviewId)
-				return {status: 400, message: "Missing required fields"};
+		.https.onCall(async (data, context) => {
+			const userId = authenticateAndGetUserIdFromContext(context)
+			const {reviewId} = data;
+			if (!reviewId)
+				new HttpsError('failed-precondition', 'Missing required data')
 			return clearReactionFromTopic("reviews", reviewId, userId)
 				.then(() => {
-					return {status: 200, message: "Successfully removed reaction"};
+					return {successful: true};
 				})
-				.catch((err) => {
-					return {error: err};
-				});
 		})
 };
