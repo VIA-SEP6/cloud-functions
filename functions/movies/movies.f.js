@@ -12,10 +12,7 @@ module.exports = {
   get: functions.region("europe-west1").https.onCall(async (data, context) => {
     const { movieId, append_to_response } = data;
     if (!movieId) new HttpsError("invalid-argument", "Missing movieId");
-    await getMovieRequest(movieId, append_to_response)
-      .then((result) => {
-        return result;
-      })
+    return getMovieRequest(movieId, append_to_response)
       .catch((err) => {
         new HttpsError("failed-precondition", err);
       });
@@ -23,10 +20,7 @@ module.exports = {
   getPopular: functions
     .region("europe-west1")
     .https.onCall(async (data, context) => {
-      await getMoviesRequest("popular")
-        .then((result) => {
-          return result;
-        })
+      return getMoviesRequest("popular")
         .catch((err) => {
           new HttpsError("failed-precondition", err);
         });
@@ -34,10 +28,7 @@ module.exports = {
   getUpcoming: functions
     .region("europe-west1")
     .https.onCall(async (data, context) => {
-      await getMoviesRequest("upcoming")
-        .then((result) => {
-          return result;
-        })
+      return getMoviesRequest("upcoming")
         .catch((err) => {
           new HttpsError("failed-precondition", err);
         });
@@ -45,10 +36,7 @@ module.exports = {
   getTopRated: functions
     .region("europe-west1")
     .https.onCall(async (data, context) => {
-      await getTopRatedMoviesRequest()
-        .then((result) => {
-          return result;
-        })
+      return getTopRatedMoviesRequest()
         .catch((err) => {
           new HttpsError("failed-precondition", err);
         });
@@ -58,10 +46,7 @@ module.exports = {
     .https.onCall(async (data, context) => {
       const { query } = data;
       if (!query) new HttpsError("invalid-argument", "Missing required fields");
-      await searchMovieGetRequest(query)
-        .then((result) => {
-          return result;
-        })
+      return searchMovieGetRequest(query)
         .catch((err) => {
           new HttpsError("failed-precondition", err);
         });

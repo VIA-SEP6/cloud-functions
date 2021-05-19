@@ -109,7 +109,6 @@ const prepareTMATopRatedMovies = async (limit) => {
 	const tmaTopMovies = await getTopMovies(limit);
 	const tmaResults = [];
 
-	console.log(tmaTopMovies);
 	if (tmaTopMovies.length > 0) {
 		for (const movie of tmaTopMovies) {
 			tmaResults.push(await getMovie(movie.movieId, null));
