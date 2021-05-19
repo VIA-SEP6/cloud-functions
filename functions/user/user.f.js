@@ -50,8 +50,8 @@ module.exports = {
         const userData = userDoc.data()
 
         const favouriteMovies = []
-        await Promise.all(userData.favouriteMovies?.map(async movieId => {
-            favouriteMovies.push(await getMovieRequest(movieId))
+        await Promise.all(userData.favouriteMovies.map(async movieId => {
+            favouriteMovies.push(await getMovieRequest(movieId, null))
         }))
         userData.favouriteMovies = favouriteMovies
 
