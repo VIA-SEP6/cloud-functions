@@ -1,4 +1,5 @@
 const functions = require('firebase-functions');
+const {authenticateAndGetUserIdFromContext} = require("../util/authentication");
 const {HttpsError} = require('firebase-functions/lib/providers/https');
 const {getMovieRequest} = require('../movies/services/movieAPIService');
 const {info, error} = require('../util/logger');
@@ -43,16 +44,7 @@ module.exports = {
 	getProfile: functions
 		.region("europe-west1")
 		.https.onCall(async (data, context) => {
-			const {uid} = context.auth;
-			const name = context.auth.token.name || null;
-			const picture = context.auth.token.picture || null;
-			const email = context.auth.token.email || null;
-			console.log('Context UID', uid);
-			console.log('Context name', name);
-			console.log('Context picture', picture);
-			console.log('Context email', email);
-			const {userId} = data;
-			console.log('Data UID', userId);
+			const userId = authenticateAndGetUserIdFromContext(context)
 			const docRef = db.collection('users').doc(`${userId}`);
 			const userDoc = await docRef.get();
 			if (!userDoc.exists) {
@@ -69,11 +61,12 @@ module.exports = {
 			);
 			userData.favouriteMovies = favouriteMovies;
 
-			return {status: 200, message: {user: userData}};
+			return userData;
 		}),
 
-	updateProfile: functions.region('europe-west1').https.onCall(async (data) => {
-		const {user, userId} = data;
+	updateProfile: functions.region('europe-west1').https.onCall(async (data, context) => {
+		const userId = authenticateAndGetUserIdFromContext(context)
+		const {user} = data;
 		if (!userId) {
 			throw new HttpsError('failed-precondition', 'Missing required data.');
 		}
@@ -90,27 +83,15 @@ module.exports = {
 			.set(user, {merge: true})
 			.then(() => {
 				info(`Update User | Successful | ${userId}`);
-				return {status: 200, message: {updateSuccessful: userId}};
+				return {successful: true};
 			});
 	}),
 
-	getFavouriteMovies: functions
-		.region('europe-west1')
-		.https.onCall(async (data) => {
-			const {userId} = data;
-			const docRef = db.collection('users').doc(`${userId}`);
-			const userDoc = await docRef.get();
-			if (!userDoc.exists) {
-				throw new HttpsError('aborted', 'User does not exist.');
-			}
-
-			return userDoc.favouriteMovies;
-		}),
-
 	addFavouriteMovie: functions
 		.region('europe-west1')
-		.https.onCall(async (data) => {
-			const {userId, movieId} = data;
+		.https.onCall(async (data, context) => {
+			const userId = authenticateAndGetUserIdFromContext(context)
+			const {movieId} = data;
 			const docRef = db.collection('users').doc(`${userId}`);
 			const userDoc = await docRef.get();
 			if (!userDoc.exists) {
@@ -119,14 +100,15 @@ module.exports = {
 
 			addFavourite('users', movieId, userId).then(() => {
 				info(`addFavouriteMovie | Successful | ${userId} | ${movieId}`);
-				return {status: 200, message: {addFavouriteMovie: 'successful'}};
+				return {successful: true};
 			});
 		}),
 
 	removeFavouriteMovie: functions
 		.region('europe-west1')
-		.https.onCall(async (data) => {
-			const {userId, movieId} = data;
+		.https.onCall(async (data, context) => {
+			const userId = authenticateAndGetUserIdFromContext(context)
+			const {movieId} = data;
 			const docRef = db.collection('users').doc(`${userId}`);
 			const userDoc = await docRef.get();
 			if (!userDoc.exists) {
@@ -135,7 +117,7 @@ module.exports = {
 
 			removeFavourite('users', movieId, userId).then(() => {
 				info(`removeFavouriteMovie | Successful | ${userId} | ${movieId}`);
-				return {status: 200, message: {removeFavouriteMovie: 'successful'}};
+				return {successful: true};
 			});
 		})
 };
