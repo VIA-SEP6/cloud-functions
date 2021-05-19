@@ -10,12 +10,9 @@ const {searchMovieGetRequest} = require("./services/searchAPIService");
 
 module.exports = {
   get: functions.region("europe-west1").https.onCall(async (data, context) => {
-    const { id, append_to_response } = data;
-    if (!id)
-      return cors(request, response, () => {
-        response.status(400).send({ data: "Missing id" });
-      });
-    await getMovieRequest(id, append_to_response)
+    const { movieId, append_to_response } = data;
+    if (!movieId) new HttpsError("invalid-argument", "Missing movieId");
+    await getMovieRequest(movieId, append_to_response)
       .then((result) => {
         return result;
       })
