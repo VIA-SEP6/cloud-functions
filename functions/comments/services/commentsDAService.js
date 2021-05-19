@@ -7,7 +7,7 @@ const addComment = async (content, userId, movieId, parent = undefined) => {
 	if (!user) return Promise.reject("user not found");
 
 	const commentObj = {
-		movieId,
+		movieId: `${movieId}`, // To make sure its always a string
 		content,
 		userId,
 		timestamp: new Date(),

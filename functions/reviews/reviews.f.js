@@ -21,7 +21,7 @@ module.exports = {
 		const user = userDoc.data();
 		if (!user) new HttpsError('not-found', 'User not found')
 		const revObj = {
-			movieId,
+			movieId: `${movieId}`, // To make sure its always a string
 			description,
 			rating,
 			userId,
