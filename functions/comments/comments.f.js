@@ -58,7 +58,7 @@ module.exports = {
 	}),
 	removeReaction: functions
 		.region("europe-west1")
-		.https.onCall(async (data) => {
+		.https.onCall(async (data, context) => {
 			const userId = authenticateAndGetUserIdFromContext(context)
 
 			const {commentId} = data;
