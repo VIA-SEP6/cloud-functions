@@ -1,4 +1,5 @@
 const functions = require("firebase-functions");
+const {authenticateAndGetUserIdFromContext} = require("../util/authentication");
 const {
 	likeTopic,
 	dislikeTopic,
@@ -8,9 +9,11 @@ const {HttpsError} = require("firebase-functions/lib/providers/https");
 const {addComment} = require("./services/commentsDAService");
 
 module.exports = {
-	add: functions.region("europe-west1").https.onCall(async (data) => {
-		const {content, userId, movieId, parent} = data;
-		if (!userId || !content || !movieId)
+	add: functions.region("europe-west1").https.onCall(async (data, context) => {
+		const userId = authenticateAndGetUserIdFromContext(context)
+
+		const {content, movieId, parent} = data;
+		if (!content || !movieId)
 			throw new HttpsError("invalid-argument", "Required fields");
 
 		return addComment(content, userId, movieId, parent)
@@ -21,10 +24,12 @@ module.exports = {
 				throw new HttpsError("internal", err);
 			});
 	}),
-	like: functions.region("europe-west1").https.onCall(async (data) => {
-		const {userId, commentId} = data;
+	like: functions.region("europe-west1").https.onCall(async (data, context) => {
+		const userId = authenticateAndGetUserIdFromContext(context)
 
-		if (!userId || !commentId)
+		const {commentId} = data;
+
+		if (!commentId)
 			throw new HttpsError("invalid-argument", "Missing id");
 
 		return likeTopic("comments", commentId, userId)
@@ -35,10 +40,12 @@ module.exports = {
 				throw new HttpsError("internal", err);
 			});
 	}),
-	dislike: functions.region("europe-west1").https.onCall(async (data) => {
-		const {userId, commentId} = data;
+	dislike: functions.region("europe-west1").https.onCall(async (data, context) => {
+		const userId = authenticateAndGetUserIdFromContext(context)
 
-		if (!userId || !commentId)
+		const {commentId} = data;
+
+		if (!commentId)
 			throw new HttpsError("invalid-argument", "Missing id");
 
 		return dislikeTopic("comments", commentId, userId)
@@ -52,9 +59,11 @@ module.exports = {
 	removeReaction: functions
 		.region("europe-west1")
 		.https.onCall(async (data) => {
-			const {userId, commentId} = data;
+			const userId = authenticateAndGetUserIdFromContext(context)
 
-			if (!userId || !commentId)
+			const {commentId} = data;
+
+			if (!commentId)
 				throw new HttpsError("invalid-argument", "Missing required fields");
 
 			return clearReactionFromTopic("comments", commentId, userId)
