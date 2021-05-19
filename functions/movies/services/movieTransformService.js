@@ -17,7 +17,6 @@ const addURLToImages = (data) => {
 };
 
 const addTMAVoteAverage = async (data) => {
-
 	const {avgRating, numRatings} = await getMovieRating(data.id);
 
 	data["tma_vote_average"] = avgRating;
@@ -44,7 +43,7 @@ const overwriteIMDBVotesWithTMA = async (data) => {
 	}
 
 	return data;
-}
+};
 
 const limitResults = (limit, data) => {
 	data.results = data.results.slice(0, limit);

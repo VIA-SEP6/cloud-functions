@@ -29,9 +29,10 @@ const updateMovieReviewRating = async (data) => {
 };
 
 const createMovie = async (movieId) => {
-	return db.collection("movies")
+	return db
+		.collection("movies")
 		.doc(movieId)
-		.set({avgRating: 0, numRatings: 0})
+		.set({avgRating: 0, numRatings: 0});
 };
 
 const getMovieRating = async (movieId) => {
@@ -41,7 +42,10 @@ const getMovieRating = async (movieId) => {
 		return {avgRating: 0, numRatings: 0};
 	}
 
-	return {avgRating: movieDoc.data().avgRating, numRatings: movieDoc.data().numRatings};
+	return {
+		avgRating: movieDoc.data().avgRating,
+		numRatings: movieDoc.data().numRatings
+	};
 };
 
 const getTopMovies = async (limit) => {
@@ -53,9 +57,9 @@ const getTopMovies = async (limit) => {
 
 	const movies = [];
 
-	topMovies.forEach(snapshot => {
-		movies.push({movieId:snapshot.id});
-	})
+	for (const snapshot of topMovies) {
+		movies.push({movieId: snapshot.id});
+	}
 
 	return movies;
 };
