@@ -16,7 +16,8 @@ module.exports = functions
 						username: user.displayName,
 						email: user.email,
 						profilePhotoUrl: user.photoURL,
-						phone: user.phoneNumber
+						phone: user.phoneNumber,
+						favouriteMovies: []
 					},
 					{merge: true}
 				)
