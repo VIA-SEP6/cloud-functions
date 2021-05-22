@@ -1,7 +1,7 @@
 const {db} = require("../../../util/adminDbUtil");
 
 const getTopCommenters = async (limit) => {
-    const usersSnapshot = await db.collection("users").orderBy('nrOfComments').limit(limit).get();
+    const usersSnapshot = await db.collection("users").orderBy('nrOfComments', "desc").limit(limit).get();
 
     const topCommenters = [];
 
