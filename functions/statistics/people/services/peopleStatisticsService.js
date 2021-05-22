@@ -1,6 +1,6 @@
 const {
 	translateGenre
-} = require("../../genres/services/genresTranslateService");
+} = require("../../../genres/services/genresTranslateService");
 
 const getCountPerDepartment = (data) => {
 	const {crew} = data.movie_credits;

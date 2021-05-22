@@ -4,7 +4,7 @@ const {
 const {
 	getCountPerDepartment,
 	getGenreNameCount
-} = require("./peopleStatisticsService");
+} = require("../../statistics/people/services/peopleStatisticsService");
 
 const addURLToImages = (data) => {
 	const imagesBaseURL = "https://image.tmdb.org/t/p/w500";

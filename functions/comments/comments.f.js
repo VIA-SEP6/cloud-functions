@@ -20,12 +20,9 @@ module.exports = {
 
 		return addComment(content, userId, movieId, parent)
 			.then(() => {
-
 				if (parent) {
 				addNotification("comments", parent, userId, "reply");
 				}
-				
-				return {status: 200, message: "Comment added"};
 			})
 			.catch((err) => {
 				throw new HttpsError("internal", err);
@@ -42,7 +39,6 @@ module.exports = {
 		return likeTopic("comments", commentId, userId)
 			.then(() => {
 				addNotification("comments", commentId, userId, "like");
-				return {status: 200, message: "Successfully liked"};
 			})
 			.catch((err) => {
 				throw new HttpsError("internal", err);
@@ -57,9 +53,6 @@ module.exports = {
 			throw new HttpsError("invalid-argument", "Missing id");
 
 		return dislikeTopic("comments", commentId, userId)
-			.then(() => {
-				return {status: 200, message: "Successfully disliked"};
-			})
 			.catch((err) => {
 				throw new HttpsError("internal", err);
 			});
@@ -75,9 +68,6 @@ module.exports = {
 				throw new HttpsError("invalid-argument", "Missing required fields");
 
 			return clearReactionFromTopic("comments", commentId, userId)
-				.then(() => {
-					return {status: 200, message: "Successfully removed reaction"};
-				})
 				.catch((err) => {
 					throw new HttpsError("internal", err);
 				});

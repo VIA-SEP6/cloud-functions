@@ -11,9 +11,7 @@ module.exports = {
         if (!notificationId)
             throw new HttpsError("invalid-argument", "Required fields");
 
-        return markAsRead(notificationId, userId).then(() => {
-            return {status: 200, message: "Notification marked as read"};
-        })
+        return markAsRead(notificationId, userId)
         .catch((err) => {
             throw new HttpsError("internal", err);
         });
@@ -21,9 +19,7 @@ module.exports = {
     markAllAsRead: functions.region("europe-west1").https.onCall(async (data, context) => {
 		const userId = authenticateAndGetUserIdFromContext(context);
 
-        return markAllAsRead(userId).then(() => {
-            return {status: 200, message: "Notifications marked as read"};
-        })
+        return markAllAsRead(userId)
         .catch((err) => {
             throw new HttpsError("internal", err);
         });
