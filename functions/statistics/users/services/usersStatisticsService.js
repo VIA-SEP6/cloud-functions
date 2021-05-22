@@ -6,7 +6,7 @@ const getTopCommenters = async (limit) => {
     const topCommenters = [];
 
     usersSnapshot.forEach(doc => {
-        topCommenters.push(doc.data());
+        topCommenters.push({id: doc.id, ...doc.data()});
     });
 
     return topCommenters;
