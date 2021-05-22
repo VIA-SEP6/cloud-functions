@@ -1,6 +1,6 @@
 const functions = require("firebase-functions");
-const { info, error } = require("../util/logger");
-const { db, admin } = require("../util/adminDbUtil");
+const { info, error } = require("../../util/logger");
+const { db, admin } = require("../../util/adminDbUtil");
 
 module.exports = functions
   .region("europe-west1")

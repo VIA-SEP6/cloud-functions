@@ -1,8 +1,8 @@
 const functions = require("firebase-functions");
 const {
   updateMovieReviewRating,
-} = require("../movies/services/movieDAService");
-const { updateReviewsCount } = require("../user/services/userProfileUtils");
+} = require("../../movies/services/movieDAService");
+const { updateReviewsCount } = require("../../user/services/userProfileUtils");
 
 module.exports = functions
   .region("europe-west1")

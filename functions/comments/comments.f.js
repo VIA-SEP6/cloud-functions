@@ -7,8 +7,6 @@ const {
 } = require("../util/reactions/reactionService");
 const {HttpsError} = require("firebase-functions/lib/providers/https");
 const {addComment} = require("./services/commentsDAService");
-const {addNotification} = require('../notifications/services/notificationsDAService');
-
 
 module.exports = {
 	add: functions.region("europe-west1").https.onCall(async (data, context) => {
@@ -19,11 +17,6 @@ module.exports = {
 			throw new HttpsError("invalid-argument", "Required fields");
 
 		return addComment(content, userId, movieId, parent)
-			.then(() => {
-				if (parent) {
-				addNotification("comments", parent, userId, "reply");
-				}
-			})
 			.catch((err) => {
 				throw new HttpsError("internal", err);
 			});
@@ -37,9 +30,6 @@ module.exports = {
 			throw new HttpsError("invalid-argument", "Missing id");
 
 		return likeTopic("comments", commentId, userId)
-			.then(() => {
-				addNotification("comments", commentId, userId, "like");
-			})
 			.catch((err) => {
 				throw new HttpsError("internal", err);
 			});
