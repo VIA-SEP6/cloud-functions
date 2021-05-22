@@ -11,7 +11,7 @@ module.exports = functions
 
         const changes = newLikes.filter(like => !oldLikes.includes(like));
 
-        if (!changes.empty) {
-            addNotification("reviews", change.after.id, changes[0], "like");
+        if (!changes.length === 0) {
+            await addNotification("reviews", change.after.id, changes[0], "like");
         }
   });
