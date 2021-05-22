@@ -1,8 +1,8 @@
 # Cloud Functions comments
 
-### `POST` Add Review
+### `POST` Add comment
 
-Adds a new review <br>
+Adds a new comment <br>
 
 `https://europe-west1-sep6-310611.cloudfunctions.net/comments-add`
 
@@ -16,44 +16,44 @@ const requestBody = {
 };
 ```
 
-### `POST` Like Review
+### `POST` Like comment
 
-Like a review <br>
+Like a comment <br>
 
 `https://europe-west1-sep6-310611.cloudfunctions.net/comments-like`
 
 ```js
 const requestBody = {
   data: {
-    reviewId: 3456,
+    commentId: 3456,
   },
 };
 ```
 
-### `POST` Dislike Review
+### `POST` Dislike comment
 
-Dislike a review <br>
+Dislike a comment <br>
 
 `https://europe-west1-sep6-310611.cloudfunctions.net/comments-dislike`
 
 ```js
 const requestBody = {
   data: {
-    reviewId: 3456,
+    commentId: 3456,
   },
 };
 ```
 
-### `POST` Remove Reaction Review
+### `POST` Remove Reaction comment
 
-Remove reaction from review <br>
+Remove reaction from comment <br>
 
 `https://europe-west1-sep6-310611.cloudfunctions.net/comments-removeReaction`
 
 ```js
 const requestBody = {
   data: {
-    reviewId: 3456,
+    commentId: 3456,
   },
 };
 ```

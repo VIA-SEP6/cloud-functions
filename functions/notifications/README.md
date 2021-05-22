@@ -14,7 +14,7 @@ const requestBody = {
 };
 ```
 
-### `POST` Mark Notification As Read
+### `POST` Mark all as read for a specific user
 
 Mark all notifications as read<br>
 
