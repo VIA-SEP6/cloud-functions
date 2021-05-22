@@ -7,6 +7,8 @@ const {
 } = require("../util/reactions/reactionService");
 const {HttpsError} = require("firebase-functions/lib/providers/https");
 const {addComment} = require("./services/commentsDAService");
+const {addNotification} = require('../notifications/services/notificationsDAService');
+
 
 module.exports = {
 	add: functions.region("europe-west1").https.onCall(async (data, context) => {
@@ -18,7 +20,12 @@ module.exports = {
 
 		return addComment(content, userId, movieId, parent)
 			.then(() => {
-				return {status: 200, message: "Commend added"};
+
+				if (parent) {
+				addNotification("comments", parent, userId, "reply");
+				}
+				
+				return {status: 200, message: "Comment added"};
 			})
 			.catch((err) => {
 				throw new HttpsError("internal", err);
@@ -34,6 +41,7 @@ module.exports = {
 
 		return likeTopic("comments", commentId, userId)
 			.then(() => {
+				addNotification("comments", commentId, userId, "like");
 				return {status: 200, message: "Successfully liked"};
 			})
 			.catch((err) => {

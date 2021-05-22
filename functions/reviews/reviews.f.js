@@ -46,6 +46,7 @@ module.exports = {
 			new HttpsError('failed-precondition', 'Missing required data')
 		return likeTopic("reviews", reviewId, userId)
 			.then(() => {
+				addNotification("reviews", reviewId, userId, "like");
 				return {successful: true};
 			})
 			.catch((err) => {
