@@ -1,4 +1,5 @@
 const functions = require("firebase-functions");
+const {getUpdatedUser} = require("./services/userProfileUtils");
 const {authenticateAndGetUserIdFromContext} = require("../util/authentication");
 const {HttpsError} = require("firebase-functions/lib/providers/https");
 const {getMovieRequest} = require("../movies/services/movieAPIService");
@@ -11,7 +12,7 @@ const {
 
 module.exports = {
 	register: functions.region("europe-west1").https.onCall(async (data) => {
-		const {userName, password, email, userInfo} = data;
+		const {userName, password, email} = data;
 		if (!userName || !password || !email) {
 			throw new HttpsError('failed-precondition', 'Missing required data.');
 		}
@@ -26,14 +27,8 @@ module.exports = {
 				displayName: userName
 			})
 			.then((user) => {
-				return db
-					.collection('users')
-					.doc(`${user.uid}`)
-					.set({...userInfo, email, userName}, {merge: true})
-					.then(() => {
-						info(`Register User | Successful | ${user.uid}`);
-						return {status: 200, message: {user: user.uid}};
-					});
+				info(`Register User | Successful | ${user.uid}`);
+				return {status: 200, message: {user: user.uid}};
 			})
 			.catch((err) => {
 				error(`Register User | Error | ${err}`);
@@ -70,21 +65,22 @@ module.exports = {
 			const userId = authenticateAndGetUserIdFromContext(context);
 			const {user} = data;
 
+			const updatedUser = getUpdatedUser(user)
+
 			const docRef = db.collection('users').doc(`${userId}`);
 			const userDoc = await docRef.get();
 			if (!userDoc.exists) {
 				throw new HttpsError("aborted", "User does not exist.");
 			}
 
-			return db
-				.collection('users')
-				.doc(`${userId}`)
-				.set(user, {merge: true})
+			return docRef
+				.set(updatedUser, {merge: true})
 				.then(() => {
 					info(`Update User | Successful | ${userId}`);
 					return {successful: true};
 				});
 		}),
+
 
 	addFavouriteMovie: functions
 		.region("europe-west1")

@@ -13,7 +13,7 @@ module.exports = functions
 				.doc(`${user.uid}`)
 				.set(
 					{
-						username: user.displayName,
+						userName: user.displayName,
 						email: user.email,
 						profilePhotoUrl: user.photoURL,
 						phone: user.phoneNumber,
