@@ -1,81 +1,84 @@
 # Cloud Functions User
 
+***
+
 ### `POST` Register User
 
 Creates a new user account<br>
 
-`https://europe-west1-sep6-310611.cloudfunctions.net/user-register`
+`user-register`
 
 ```js
 const requestBody = {
-  data: {
-    userName: "David",
-    password: "theBestOne",
-    email: "david@via.dk",
-    userInfo: {
-      age: 22,
-      country: "Denmark",
-      phone: "+4578451296",
+    data: {
+        userName: "David",
+        password: "theBestOne",
+        email: "david@via.dk",
     },
-  },
 };
 ```
+
+***
 
 ### `POST` Get User Profile
 
 Retrieves User information account<br>
 
-`https://europe-west1-sep6-310611.cloudfunctions.net/user-getProfile`
+`user-getProfile`
 
 ```js
 const requestBody = {
-  data: {
-    userId: "ugqkdgybwh549849",
-  },
+    data: {},
 };
 ```
+
+***
 
 ### `POST` Update User Profile
 
-Adds User's favourite movies<br>
+Updates users information
 
-`https://europe-west1-sep6-310611.cloudfunctions.net/user-addFavouriteMovie`
+`user-addFavouriteMovie`
 
 ```js
 const requestBody = {
-  data: {
-    userId: "Cv3bBw5woEcfJYCcEY9sFlGzvwE3",
-    movieId: "789456",
-  },
+    data: {
+        userName: "Test User",
+        age: "22",
+        country: null,
+        phone: "12345678",
+    },
 };
 ```
+
+***
 
 ### `POST` Add favourite movies to User Profile
 
 Adds User's favourite movies<br>
 
-`https://europe-west1-sep6-310611.cloudfunctions.net/user-addFavouriteMovie`
+`user-addFavouriteMovie`
 
 ```js
 const requestBody = {
-  data: {
-    userId: "Cv3bBw5woEcfJYCcEY9sFlGzvwE3",
-    movieId: "789456",
-  },
+    data: {
+        movieId: "789456",
+    },
 };
 ```
+
+***
 
 ### `POST` Removes favourite movies from User Profile
 
 Adds User's favourite movies<br>
 
-`https://europe-west1-sep6-310611.cloudfunctions.net/user-removeFavouriteMovie`
+`user-removeFavouriteMovie`
 
 ```js
 const requestBody = {
-  data: {
-    userId: "Cv3bBw5woEcfJYCcEY9sFlGzvwE3",
-    movieId: "789456",
-  },
+    data: {
+        movieId: "789456",
+    },
 };
 ```
