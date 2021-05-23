@@ -63,9 +63,16 @@ module.exports = {
 		.region("europe-west1")
 		.https.onCall(async (data, context) => {
 			const userId = authenticateAndGetUserIdFromContext(context);
-			const {user} = data;
+			const {userName, age, country, phone} = data;
 
-			const updatedUser = getUpdatedUser(user)
+			if (userName)
+				admin.auth()
+					.updateUser(userId, {displayName: userName})
+					.then(userRecord => {
+						info(`Auth Update User | Successful | Updated to ${userRecord.displayName}`)
+					})
+
+			const updatedUser = getUpdatedUser({userName, age, country, phone})
 
 			const docRef = db.collection('users').doc(`${userId}`);
 			const userDoc = await docRef.get();
