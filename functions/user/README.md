@@ -38,7 +38,7 @@ const requestBody = {
 
 Updates users information
 
-`user-addFavouriteMovie`
+`user-updateProfile`
 
 ```js
 const requestBody = {
