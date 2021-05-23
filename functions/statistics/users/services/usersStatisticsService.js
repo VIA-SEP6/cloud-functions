@@ -1,17 +1,21 @@
 const {db} = require("../../../util/adminDbUtil");
 
 const getTopCommenters = async (limit) => {
-    const usersSnapshot = await db.collection("users").orderBy('nrOfComments', "desc").limit(limit).get();
+	const usersSnapshot = await db
+		.collection("users")
+		.orderBy("nrOfComments", "desc")
+		.limit(limit)
+		.get();
 
-    const topCommenters = [];
+	const topCommenters = [];
 
-    usersSnapshot.forEach(doc => {
-        topCommenters.push({id: doc.id, ...doc.data()});
-    });
+	for (const doc of usersSnapshot) {
+		topCommenters.push({id: doc.id, ...doc.data()});
+	}
 
-    return topCommenters;
+	return topCommenters;
 };
 
 module.exports = {
-    getTopCommenters
-}
+	getTopCommenters
+};

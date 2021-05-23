@@ -57,9 +57,9 @@ const getTopMovies = async (limit) => {
 
 	const movies = [];
 
-	topMovies.forEach(snapshot => {
-		movies.push({movieId: snapshot.id})
-	})
+	for (const snapshot of topMovies) {
+		movies.push({movieId: snapshot.id});
+	}
 
 	return movies;
 };
