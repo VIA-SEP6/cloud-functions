@@ -66,16 +66,13 @@ module.exports = {
 			const {userName, age, country, phone} = data;
 
 			if (userName)
-				admin
-					.auth()
+				admin.auth()
 					.updateUser(userId, {displayName: userName})
-					.then((userRecord) => {
-						info(
-							`Auth Update User | Successful | Updated to ${userRecord.displayName}`
-						);
-					});
+					.then(userRecord => {
+						info(`Auth Update User | Successful | Updated to ${userRecord.displayName}`)
+					})
 
-			const updatedUser = getUpdatedUser({userName, age, country, phone});
+			const updatedUser = getUpdatedUser({userName, age, country, phone})
 
 			const docRef = db.collection('users').doc(`${userId}`);
 			const userDoc = await docRef.get();
@@ -83,11 +80,14 @@ module.exports = {
 				throw new HttpsError("aborted", "User does not exist.");
 			}
 
-			return docRef.set(updatedUser, {merge: true}).then(() => {
-				info(`Update User | Successful | ${userId}`);
-				return {successful: true};
-			});
+			return docRef
+				.set(updatedUser, {merge: true})
+				.then(() => {
+					info(`Update User | Successful | ${userId}`);
+					return {successful: true};
+				});
 		}),
+
 
 	addFavouriteMovie: functions
 		.region("europe-west1")

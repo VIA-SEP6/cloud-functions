@@ -10,11 +10,7 @@ module.exports = {
 
 		const result = await getPersonRequest(id);
 
-		if (!result)
-			throw new HttpsError(
-				"internal",
-				"Getting person from external source failed"
-			);
+		if (!result) throw new HttpsError("internal", "Getting person from external source failed");
 
 		return result;
 	})
