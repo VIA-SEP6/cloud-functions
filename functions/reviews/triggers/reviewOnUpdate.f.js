@@ -2,27 +2,21 @@ const functions = require("firebase-functions");
 const {addNotification} = require("../../notifications/services/notificationsDAService");
 
 module.exports = functions
-  .region("europe-west1")
-  .firestore.document("reviews/{reviewId}")
-  .onUpdate(async (change, context) => {
+    .region("europe-west1")
+    .firestore.document("reviews/{reviewId}")
+    .onUpdate(async (change, context) => {
 
-        const newLikes = change.after.data().likes;
-        const oldLikes = change.before.data().likes;
+        const {likes: newLikes, dislikes: newDislikes} = change.after.data()
+        const {likes: oldLikes, dislikes: oldDislikes} = change.before.data()
 
-        const likeChanges = newLikes.filter(like => !oldLikes.includes(like));
+        await handleNotification(change.after.id, "like", newLikes, oldLikes)
+        await handleNotification(change.after.id, "dislike", newDislikes, oldDislikes)
+    });
 
-        if (likeChanges.length !== 0) {
-            console.info("New Like detected")
-            await addNotification("reviews", change.after.id, likeChanges[0], "like");
-        }
+const handleNotification = async (reviewId, action, after = [], before = []) => {
+    const changes = after.filter(like => !before.includes(like));
 
-      const newDislikes = change.after.data().dislikes || [];
-      const oldDislikes = change.before.data().dislikes || [];
-
-      const dislikeChanges = newDislikes.filter(like => !oldDislikes.includes(like));
-
-      if (dislikeChanges.length !== 0) {
-          console.info("New Dislike detected")
-          await addNotification("reviews", change.after.id, dislikeChanges[0], "dislike");
-      }
-  });
+    if (changes.length !== 0) {
+        await addNotification("reviews", reviewId, changes[0], action);
+    }
+}

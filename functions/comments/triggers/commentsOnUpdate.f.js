@@ -2,17 +2,21 @@ const functions = require("firebase-functions");
 const {addNotification} = require("../../notifications/services/notificationsDAService");
 
 module.exports = functions
-  .region("europe-west1")
-  .firestore.document("comments/{commentId}")
-  .onUpdate(async (change, context) => {
+    .region("europe-west1")
+    .firestore.document("comments/{commentId}")
+    .onUpdate(async (change, context) => {
 
-        const newLikes = change.after.data().likes;
-        const oldLikes = change.before.data().likes;
+        const {likes: newLikes, dislikes: newDislikes} = change.after.data()
+        const {likes: oldLikes, dislikes: oldDislikes} = change.before.data()
 
-        const changes = newLikes.filter(like => !oldLikes.includes(like));
+        await handleNotification(change.after.id, "like", newLikes, oldLikes)
+        await handleNotification(change.after.id, "dislike", newDislikes, oldDislikes)
+    });
 
-        console.log(changes);
-        if (changes.length !== 0) {
-            await addNotification("comments", change.after.id, changes[0], "like");
-        }
-  });
+const handleNotification = async (commentId, action, after = [], before = []) => {
+    const changes = after.filter(like => !before.includes(like));
+
+    if (changes.length !== 0) {
+        await addNotification("comments", commentId, changes[0], action);
+    }
+}
