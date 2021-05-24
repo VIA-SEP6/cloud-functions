@@ -1,6 +1,6 @@
 # SEP 6 Movie App
 
-*Application is written in Javascript using Firebase SDK
+\*Application is written in Javascript using Firebase SDK
 
 ## Functions Documentation
 
@@ -17,3 +17,5 @@
 ### [User](functions/user/README.md)
 
 ### [User Statistics](functions/statistics/users/README.md)
+
+### [Review Statistics](functions/statistics/reviews/README.md)
