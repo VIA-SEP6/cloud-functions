@@ -28,8 +28,15 @@ const getUpdatedUser = (user) => {
     return updatedUser
 }
 
+const updateProfilePhotoUrl = async (userId, path) => {
+        return db.collection("users")
+        .doc(userId)
+        .set({profilePhotoUrl: path},{merge: true});
+}
+
 module.exports = {
     updateReviewsCount,
     updateCommentsCount,
-    getUpdatedUser
+    getUpdatedUser,
+    updateProfilePhotoUrl
 };
