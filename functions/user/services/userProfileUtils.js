@@ -1,3 +1,5 @@
+const {info} = require("../../util/logger");
+const {admin} = require("../../util/adminDbUtil");
 const {db} = require("../../util/adminDbUtil");
 
 const updateReviewsCount = async (userId) => {
@@ -28,6 +30,14 @@ const getUpdatedUser = (user) => {
     return updatedUser
 }
 
+const updateUserInAuth = (userId, userData) => {
+    admin.auth()
+        .updateUser(userId, userData)
+        .then(() => {
+            info(`Auth Update User | Successful | Updated ${userData}`)
+        })
+}
+
 const updateProfilePhotoUrl = async (userId, path) => {
         return db.collection("users")
         .doc(userId)
@@ -38,5 +48,6 @@ module.exports = {
     updateReviewsCount,
     updateCommentsCount,
     getUpdatedUser,
-    updateProfilePhotoUrl
+    updateProfilePhotoUrl,
+    updateUserInAuth
 };

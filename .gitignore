@@ -74,3 +74,5 @@ firebase-debug.log
 *.log
 .vscode
 .idea/
+serviceAccount.json
+emulators

@@ -1,4 +1,5 @@
 const functions = require("firebase-functions");
+const {updateUserInAuth} = require("./services/userProfileUtils");
 const {getUpdatedUser} = require("./services/userProfileUtils");
 const {authenticateAndGetUserIdFromContext} = require("../util/authentication");
 const {HttpsError} = require("firebase-functions/lib/providers/https");
@@ -66,11 +67,7 @@ module.exports = {
 			const {userName, age, country, phone} = data;
 
 			if (userName)
-				admin.auth()
-					.updateUser(userId, {displayName: userName})
-					.then(userRecord => {
-						info(`Auth Update User | Successful | Updated to ${userRecord.displayName}`)
-					})
+				updateUserInAuth(userId, {displayName: userName})
 
 			const updatedUser = getUpdatedUser({userName, age, country, phone})
 
