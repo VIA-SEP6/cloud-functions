@@ -4,12 +4,12 @@ const {isViableProfilePicture} = require("../../util/processing/images/imagesPro
 
 module.exports = functions
 	.region("europe-west1")
-	.storage.bucket('users').object().onFinalize(async (object) =>{
-		const path = object.name;
+	.storage.object().onFinalize(async (object) =>{
+		const {name: path, mediaLink} = object;
 		
 		if (isViableProfilePicture(path)) {
         	const pathDetails = path.split('/');
 			const userId = pathDetails[1];
-			await updateProfilePhotoUrl(userId, path);
+			await updateProfilePhotoUrl(userId, mediaLink);
 		}
 	});
