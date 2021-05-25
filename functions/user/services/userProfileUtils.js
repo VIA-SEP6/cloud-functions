@@ -34,7 +34,7 @@ const updateUserInAuth = (userId, userData) => {
     admin.auth()
         .updateUser(userId, userData)
         .then(() => {
-            info(`Auth Update User | Successful | Updated ${userData}`)
+            info(`Auth Update User | Successful | Updated ${{userData}}`)
         })
 }
 
