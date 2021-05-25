@@ -16,13 +16,12 @@ const getReviewStatistics = async (movieId) => {
 }
 
 const groupReviewStatisticsByRating = (reviews) => {
-    const countPerReview = reviews.reduce((acc, review) => {
+    return reviews.reduce((acc, review) => {
         acc[review.rating] = acc[review.rating] + 1 || 1;
         return acc;
     }, {});
-    return countPerReview;
 }
 
 module.exports = {
-    getReviewStatistics
+    getReviewStatistics: getReviewStatistics
 }
