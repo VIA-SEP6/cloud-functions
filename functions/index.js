@@ -1,5 +1,8 @@
 const admin = require("firebase-admin");
-admin.initializeApp();
+const serviceAccount = require('serviceAccount.json')
+const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG)
+adminConfig.credential = admin.credential.cert(serviceAccount)
+admin.initializeApp(adminConfig);
 const glob = require("glob");
 
 const files = glob.sync("./**/*.f.js", {
