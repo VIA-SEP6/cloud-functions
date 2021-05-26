@@ -7,7 +7,8 @@ module.exports = {
   update: functions
     .runWith({ timeoutSeconds: 300, memory: "2GB" })
     .region("europe-west1")
-    .https.onCall(async (data, context) => {
+    .pubsub.schedule("0 0 * * *")
+    .onRun(async () => {
       await calculateForPlatformCollection("comments");
       await calculateForPlatformCollection("reviews");
     }),
