@@ -2,6 +2,7 @@ const functions = require("firebase-functions");
 const {addNotification} = require("../../notifications/services/notificationsDAService");
 
 module.exports = functions
+    .runWith({timeoutSeconds: 300,memory: '2GB'})
     .region("europe-west1")
     .firestore.document("comments/{commentId}")
     .onUpdate(async (change, context) => {

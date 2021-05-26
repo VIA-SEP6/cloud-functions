@@ -5,8 +5,8 @@ const {getReviewStatistics} = require("./services/reviewStatisticsService");
 
 module.exports = {
     get: functions
-        .region("europe-west1")
-        .https.onCall(async (data, context) => {
+        .runWith({timeoutSeconds: 300,memory: '2GB'})
+        .region("europe-west1").https.onCall(async (data, context) => {
             const {movieId} = data;
             if (!movieId) new HttpsError("invalid-argument", "Missing movieId");
             return getReviewStatistics(movieId)

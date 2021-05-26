@@ -5,23 +5,24 @@ const {updateProfilePhotoUrl} = require("../services/userProfileUtils");
 const {isViableProfilePicture} = require("../../util/processing/images/imagesProcessingService");
 
 module.exports = functions
-	.region("europe-west1")
-	.storage.object().onFinalize(async (object) =>{
-		const {name: path, mediaLink} = object;
+    .runWith({timeoutSeconds: 300, memory: '2GB'})
+    .region("europe-west1")
+    .storage.object().onFinalize(async (object) => {
+        const {name: path, mediaLink} = object;
 
-		if (isViableProfilePicture(path)) {
-			const pathDetails = path.split('/');
-			const userId = pathDetails[1];
-			const publicURL = await getPublicUrl(path)
-			await updateProfilePhotoUrl(userId, publicURL);
-			await updateUserInAuth(userId, {photoURL: publicURL})
-		}
-	});
+        if (isViableProfilePicture(path)) {
+            const pathDetails = path.split('/');
+            const userId = pathDetails[1];
+            const publicURL = await getPublicUrl(path)
+            await updateProfilePhotoUrl(userId, publicURL);
+            await updateUserInAuth(userId, {photoURL: publicURL})
+        }
+    });
 
 const getPublicUrl = async (path) => {
-	const options = {
-		action: 'read',
-		expires: new Date().setFullYear(new Date().getFullYear() + 10)
-	}
-	return (await storage.bucket().file(path).getSignedUrl(options))[0]
+    const options = {
+        action: 'read',
+        expires: new Date().setFullYear(new Date().getFullYear() + 10)
+    }
+    return (await storage.bucket().file(path).getSignedUrl(options))[0]
 }

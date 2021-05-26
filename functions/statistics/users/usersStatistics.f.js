@@ -6,8 +6,8 @@ const {getTopCommenters} = require("./services/usersStatisticsService");
 
 module.exports = {
     getTopCommenters: functions
-        .region("europe-west1")
-        .https.onCall(async (data, context) => {
+        .runWith({timeoutSeconds: 300, memory: '2GB'})
+        .region("europe-west1").https.onCall(async (data, context) => {
             authenticateAndGetUserIdFromContext(context)
             return getTopCommenters(5)
                 .catch((err) => {

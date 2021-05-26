@@ -10,8 +10,7 @@ const likeTopic = async (collection, topicId, userUid) => {
 		return Promise.reject("missing document");
 	}
 
-	const {likes} = topicDocument.data();
-	const {dislikes} = topicDocument.data();
+	const {likes, dislikes} = topicDocument.data();
 
 	if (likes.includes(userUid)) {
 		return Promise.resolve("already liked");
