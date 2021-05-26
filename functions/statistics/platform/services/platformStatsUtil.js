@@ -2,6 +2,10 @@ const { db } = require("../../../util/adminDbUtil");
 const { firestore } = require("firebase-admin");
 const initialStatistics = require('./initialStatistics.json')
 
+const getStatisticsForCollection = async (collection, year) => {
+  return (await db.doc(`statistics/platform/${year}/${collection}`).get()).data()
+}
+
 const calculateForPlatformCollection = async (collection) => {
   const dbRef = db.doc(
     `statistics/platform/${new Date().getFullYear()}/${collection}`
@@ -55,6 +59,7 @@ const calculateStatistics = (arrayOfValues, initialValue) => {
     stats.year[date.getMonth()] = stats.year[date.getMonth()] + 1 || 1;
     stats.month[date.getDate()] = stats.month[date.getDate()] + 1 || 1;
     stats.week[date.getDay()] = stats.week[date.getDay()] + 1 || 1;
+    console.log(date.getDay())
     return stats;
   }, initialValue || initialStatistics)
 
@@ -62,5 +67,6 @@ const calculateStatistics = (arrayOfValues, initialValue) => {
 
 module.exports = {
   calculateForPlatformCollection,
-  recalculateForPlatformCollection
+  recalculateForPlatformCollection,
+  getStatisticsForCollection
 };

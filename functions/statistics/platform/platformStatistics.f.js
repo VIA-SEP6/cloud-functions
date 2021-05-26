@@ -2,7 +2,8 @@ const functions = require("firebase-functions");
 const { db } = require("../../util/adminDbUtil");
 const {
   calculateForPlatformCollection,
-  recalculateForPlatformCollection
+  recalculateForPlatformCollection,
+  getStatisticsForCollection
 } = require("./services/platformStatsUtil");
 
 module.exports = {
@@ -15,12 +16,37 @@ module.exports = {
       await calculateForPlatformCollection("reviews");
     }),
 
-  get: functions
+  getYearly: functions
     .runWith({ timeoutSeconds: 300, memory: "2GB" })
     .region("europe-west1")
     .https.onCall(async (data, context) => {
-      const { type, year } = data;
-      return (await db.doc(`statistics/platform/${year}/${type}`).get()).data();
+      const {year} = data
+      return {
+        comments: (await getStatisticsForCollection("comments", year)).year,
+        reviews: (await getStatisticsForCollection("reviews", year)).year
+      }
+    }),
+
+  getMonthly: functions
+    .runWith({ timeoutSeconds: 300, memory: "2GB" })
+    .region("europe-west1")
+    .https.onCall(async (data, context) => {
+      const {year} = data
+      return {
+        comments: (await getStatisticsForCollection("comments", year)).month,
+        reviews: (await getStatisticsForCollection("reviews", year)).month
+      }
+    }),
+
+  getWeekly: functions
+    .runWith({ timeoutSeconds: 300, memory: "2GB" })
+    .region("europe-west1")
+    .https.onCall(async (data, context) => {
+      const {year} = data
+      return {
+        comments: (await getStatisticsForCollection("comments", year)).week,
+        reviews: (await getStatisticsForCollection("reviews", year)).week
+      }
     }),
 
   recalculate: functions
