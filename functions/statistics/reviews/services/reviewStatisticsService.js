@@ -2,6 +2,20 @@ const {getAllReviewsByMovieId} = require("../../../reviews/services/reviewsDASer
 const {getMovieRequest} = require("../../../movies/services/movieAPIService");
 const {transformTMBReviewResponse} = require("../services/reviewStatisticsTransformService");
 
+const defaultReview = {
+    "0" : 0,
+    "1" : 0,
+    "2" : 0,
+    "3" : 0,
+    "4" : 0,
+    "5" : 0,
+    "6" : 0,
+    "7" : 0,
+    "8" : 0,
+    "9" : 0,
+    "10" : 0,
+}
+
 
 const getReviewStatistics = async (movieId) => {
     const statistics = {};
@@ -16,10 +30,10 @@ const getReviewStatistics = async (movieId) => {
 }
 
 const groupReviewStatisticsByRating = (reviews) => {
-    return reviews.reduce((acc, review) => {
+    return reviews.reduce((acc , review) => {
         acc[review.rating] = acc[review.rating] + 1 || 1;
         return acc;
-    }, {});
+    }, defaultReview);
 }
 
 module.exports = {
