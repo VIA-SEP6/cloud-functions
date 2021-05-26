@@ -13,6 +13,7 @@ module.exports = {
       await calculateForPlatformCollection("comments");
       await calculateForPlatformCollection("reviews");
     }),
+
   get: functions
     .runWith({ timeoutSeconds: 300, memory: "2GB" })
     .region("europe-west1")
@@ -20,12 +21,13 @@ module.exports = {
       const { type, year } = data;
       return (await db.doc(`statistics/platform/${year}/${type}`).get()).data();
     }),
+
   recalculate: functions
     .runWith({ timeoutSeconds: 300, memory: "2GB" })
     .region("europe-west1")
     .https.onCall(async (data, context) => {
       await recalculateForPlatformCollection("comments");
       await recalculateForPlatformCollection("reviews");
-      return {message: "done"}
+      return { message: "done" }
     }),
 };
