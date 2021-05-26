@@ -4,7 +4,7 @@ const {getReviewStatistics} = require("./services/reviewStatisticsService");
 
 
 module.exports = {
-    getReviewStatistics: functions
+    get: functions
         .region("europe-west1")
         .https.onCall(async (data, context) => {
             const {movieId} = data;

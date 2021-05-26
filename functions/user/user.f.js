@@ -80,7 +80,7 @@ module.exports = {
 			return docRef
 				.set(updatedUser, {merge: true})
 				.then(() => {
-					info(`Update User | Successful | ${userId}`);
+					info(`Update User | Successful | ${userId}`, {updatedUser});
 					return {successful: true};
 				});
 		}),
